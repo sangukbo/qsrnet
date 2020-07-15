@@ -42,7 +42,8 @@ class maskrcnn_inference_engine:
         confidence_threshold = 0.5
         cfg = get_cfg()
         cfg.merge_from_file(self.configuration['DIRECTORIES']['detectron_dir'] + '/configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml')
-        cfg.merge_from_list(['MODEL.WEIGHTS', self.configuration['DIRECTORIES']['qsrnet_dir'] + '/weights/maskrcnn_weight.pkl'])
+        cfg.merge_from_list(['MODEL.WEIGHTS', 'detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl'])
+        # cfg.merge_from_list(['MODEL.WEIGHTS', self.configuration['DIRECTORIES']['qsrnet_dir'] + '/weights/maskrcnn_weight.pkl'])
         cfg.MODEL.RETINANET.SCORE_THRESH_TEST = confidence_threshold
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = confidence_threshold
         cfg.MODEL.PANOPTIC_FPN.COMBINE.INSTANCES_CONFIDENCE_THRESH = confidence_threshold

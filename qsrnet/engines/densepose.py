@@ -49,7 +49,8 @@ class densepose_inference_engine:
         cfg = get_cfg()
         add_densepose_config(cfg)
         cfg.merge_from_file(self.configuration['DIRECTORIES']['densepose_dir'] + '/configs/densepose_rcnn_R_50_FPN_s1x.yaml')
-        cfg.merge_from_list(['MODEL.WEIGHTS', self.configuration['DIRECTORIES']['qsrnet_dir'] + '/weights/densepose_weight.pkl'])
+        cfg.merge_from_list(['MODEL.WEIGHTS', 'https://dl.fbaipublicfiles.com/densepose/densepose_rcnn_R_50_FPN_s1x/165712039/model_final_162be9.pkl'])
+        # cfg.merge_from_list(['MODEL.WEIGHTS', self.configuration['DIRECTORIES']['qsrnet_dir'] + '/weights/densepose_weight.pkl'])
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = confidence_threshold
         cfg.MODEL.DEVICE = 'cuda:0'
         cfg.freeze()
