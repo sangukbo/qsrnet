@@ -12,6 +12,7 @@
     },
     "NAMES": {
         "object_names": ["bottle", "righthand"],
+        "pair_names": ["(bottle,righthand)"],
         "body_part_names": ["righthand"],
         "class_names": ["person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird",
                         "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball",
@@ -31,6 +32,11 @@
         "nb_neighbors": 1000,
         "std_ratio": 3,
         "max_pcd_distance": 30.0,
-        "object_width": 300
+        "object_width": 300,
+        "qsr_n_particles": 200,
+        "resample_at": 5
+    },
+    "QSR INITIAL STATES": {
+        "(bottle,righthand)": {"rcc": "dc", "qtc1": "0", "qtc2": "0", "qtc3": "0", "qdc": "close"}
     }
 }
