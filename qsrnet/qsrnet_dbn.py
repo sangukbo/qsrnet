@@ -50,17 +50,18 @@ def dbn_qsr_main():
         metrics = pickle.loads(b"".join(metric_msg))
         print(metrics)
         # save metric
-        for pair_id in pair_ids:
-            with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + pair_id + '.csv', 'a') as f:
-                field_name = ['pcd distance', 'center distance', 'velocity 1', 'velocity 2', 'velocity 3']
-                metric_dict = {}
-                metric_dict['rcc'] = metrics['pcd_distances'][pair_id]
-                metric_dict['qtc1'] = metrics['center_distances'][pair_id]
-                metric_dict['qtc2'] = metrics['velocity1'][pair_id]
-                metric_dict['qtc3'] = metrics['velocity2'][pair_id]
-                metric_dict['qdc'] = metrics['velocity3'][pair_id]
-                writer = csv.DictWriter(f, fieldnames=field_name)
-                writer.writerow(metric_dict)
+        if metrics['velocity1'] != {}:
+            for pair_id in pair_ids:
+                with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + pair_id + '.csv', 'a') as f:
+                    field_name = ['pcd distance', 'center distance', 'velocity 1', 'velocity 2', 'velocity 3']
+                    metric_dict = {}
+                    metric_dict['pcd distance'] = metrics['pcd_distances'][pair_id]
+                    metric_dict['center distance'] = metrics['center_distances'][pair_id]
+                    metric_dict['velocity 1'] = metrics['velocity1'][pair_id]
+                    metric_dict['velocity 2'] = metrics['velocity2'][pair_id]
+                    metric_dict['velocity 3'] = metrics['velocity3'][pair_id]
+                    writer = csv.DictWriter(f, fieldnames=field_name)
+                    writer.writerow(metric_dict)
         with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + str(pf_iteration) + '.pickle', 'wb') as f:
             pickle.dump(metrics, f, protocol=2)
         client_socket.close()
