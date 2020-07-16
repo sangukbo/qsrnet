@@ -1,4 +1,4 @@
-from .compute_metrics import *
-from .dbn_qsr import *
+from .qsrnet_compute_metrics import *
+from .qsrnet_dbn import *
 
-__all__ = ['compute_metrics', 'dbn_qsr']
+__all__ = ['qsrnet_compute_metrics', 'qsrnet_dbn']

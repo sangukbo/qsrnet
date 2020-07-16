@@ -19,7 +19,8 @@ with open('/home/appuser/qsrnet/configs/config.json') as json_file:
 object_ids = get_object_ids(configuration['NAMES']['object_names'], configuration['NAMES']['class_names'])
 pair_ids = get_pair_ids(configuration['NAMES']['pair_names'], configuration['NAMES']['class_names'])
 
-open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/qsr/' + 'qsr_' + '(39,100)' + '.csv', 'w')
+for pair_id_csv in pair_ids:
+    open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/qsr/' + 'qsr_' + pair_id_csv + '.csv', 'w')
 
 def dbn_qsr_main():
     pf_iteration = 0
@@ -29,8 +30,8 @@ def dbn_qsr_main():
     for pair_id in pair_ids:
         qsr_dbn_dict[pair_id] = dynamic_bayesian_network()
         qsr_dbn_dict[pair_id] = qsr_construct_discrete_observation(qsr_dbn_dict[pair_id])
+        qsr_initial_state_dict[pair_id] = configuration['QSR INITIAL STATES'][pair_name_from_id(pair_id, configuration['NAMES']['class_names'])]
         qsr_pf_dict[pair_id] = particle_filter(qsr_dbn_dict[pair_id], configuration['ARGUMENTS']['qsr_n_particles'], qsr_initial_state_dict[pair_id])
-        qsr_initial_state_dict[paid_id] = configuration['QSR INITIAL STATES'][pair_name_from_id(pair_id, configuration['NAMES']['class_names'])]
 
     # socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

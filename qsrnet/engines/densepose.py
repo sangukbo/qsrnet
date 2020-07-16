@@ -92,4 +92,26 @@ class densepose_inference_engine:
         return np.array(total_body_part_class_ids), np.array(total_body_part_masks), np.array(total_body_part_rois)
 
     def body_part_densepose_id(self, body_part):
+        """
+        0      = Background
+        1, 2   = Torso
+        3      = Right Hand
+        4      = Left Hand
+        5      = Right Foot
+        6      = Left Foot
+        7, 9   = Upper Leg Right
+        8, 10  = Upper Leg Left
+        11, 13 = Lower Leg Right
+        12, 14 = Lower Leg Left
+        15, 17 = Upper Arm Left
+        16, 18 = Upper Arm Right
+        19, 21 = Lower Arm Left
+        20, 22 = Lower Arm Right
+        23, 24 = Head
+        """
+        if body_part == 'torso': return 1
         if body_part == 'righthand': return 3
+        if body_part == 'lefthand': return 4
+        if body_part == 'rightfoot': return 5
+        if body_part == 'leftfoot': return 6
+        if body_part == 'head': return 23
