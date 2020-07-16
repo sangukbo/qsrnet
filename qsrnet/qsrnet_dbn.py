@@ -11,6 +11,7 @@ import socket
 import pdb, traceback, sys
 from qsrnet.dbn.particle_filter import *
 from qsrnet.utils.etc import *
+from qsrnet.utils.dbn_nodes import *
 
 IP = ''; PORT = 5050; SIZE = 4*1024; ADDR = (IP, PORT)
 
@@ -19,6 +20,8 @@ with open('/home/appuser/qsrnet/configs/config.json') as json_file:
 object_ids = get_object_ids(configuration['NAMES']['object_names'], configuration['NAMES']['class_names'])
 pair_ids = get_pair_ids(configuration['NAMES']['pair_names'], configuration['NAMES']['class_names'])
 
+for pair_id_csv in pair_ids:
+    open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + pair_id_csv + '.csv', 'w')
 for pair_id_csv in pair_ids:
     open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/qsr/' + 'qsr_' + pair_id_csv + '.csv', 'w')
 
@@ -46,6 +49,20 @@ def dbn_qsr_main():
             metric_msg.append(packet)
         metrics = pickle.loads(b"".join(metric_msg))
         print(metrics)
+        # save metric
+        for pair_id in pair_ids:
+            with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + pair_id + '.csv', 'a') as f:
+                field_name = ['pcd distance', 'center distance', 'velocity 1', 'velocity 2', 'velocity 3']
+                metric_dict = {}
+                metric_dict['rcc'] = metrics['pcd_distances'][pair_id]
+                metric_dict['qtc1'] = metrics['center_distances'][pair_id]
+                metric_dict['qtc2'] = metrics['velocity1'][pair_id]
+                metric_dict['qtc3'] = metrics['velocity2'][pair_id]
+                metric_dict['qdc'] = metrics['velocity3'][pair_id]
+                writer = csv.DictWriter(f, fieldnames=field_name)
+                writer.writerow(metric_dict)
+        with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + str(pf_iteration) + '.pickle', 'wb') as f:
+            pickle.dump(metrics, f, protocol=2)
         client_socket.close()
 
         timestamp = time.time()

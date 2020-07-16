@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from scipy.stats import norm
 
 def rcc_transition_function(state_now, state_next):
@@ -19,6 +21,7 @@ def rcc_transition_function(state_now, state_next):
     return transition_prob_mat[possible_states.index(rcc_state)]
 
 def qtc1_transition_function(state_now, state_next):
+    # fix n in (m,n)
     qtc1_state = state_now['qtc1']
 
     sq = 0.05
@@ -30,6 +33,7 @@ def qtc1_transition_function(state_now, state_next):
     return transition_prob_mat[possible_states.index(qtc1_state)]
 
 def qtc2_transition_function(state_now, state_next):
+    # fix m in (m,n)
     qtc2_state = state_now['qtc2']
 
     sq = 0.05
@@ -40,6 +44,7 @@ def qtc2_transition_function(state_now, state_next):
     possible_states = ['+', '0', '-']
     return transition_prob_mat[possible_states.index(qtc2_state)]
 
+"""
 def qtc3_transition_function(state_now, state_next):
     qtc3_state = state_now['qtc3']
 
@@ -47,6 +52,40 @@ def qtc3_transition_function(state_now, state_next):
     nq = 0.025
 
     transition_prob_mat = [[1.0-sq, sq, 0.0], [nq, 1.0-nq-nq, nq], [0.0, sq, 1.0-sq]]
+
+    possible_states = ['+', '0', '-']
+    return transition_prob_mat[possible_states.index(qtc3_state)]
+"""
+
+def qtc3_transition_function(state_now, state_next):
+    rcc_state_now = state_now['rcc']
+    rcc_state_next = state_next['rcc']
+    qtc1_state = state_now['qtc1']
+    qtc2_state = state_now['qtc2']
+    qtc3_state = state_now['qtc3']
+
+    y1 = 0.2   # intuitive case
+    n1 = 0.005  # non-intuitive case
+    sq = 0.05
+    nq = 0.025
+
+    rcc_plus_index = (rcc_state_now == 'po' and rcc_state_next == 'dc') or (rcc_state_now == 'pp' and rcc_state_next == 'po')
+    rcc_0_index = (rcc_state_now == 'dc' and rcc_state_next == 'dc') or (rcc_state_now == 'po' and rcc_state_next == 'po') or (rcc_state_now == 'pp' and rcc_state_next == 'pp')
+    rcc_minus_index = (rcc_state_now == 'dc' and rcc_state_next == 'po') or (rcc_state_now == 'po' and rcc_state_next == 'pp')
+
+    plus_index = (qtc1_state == '+' or qtc2_state == '+') or rcc_plus_index
+    stable_index = (qtc1_state == '0' and qtc2_state == '0') and rcc_0_index
+    minus_index = (qtc1_state == '-' or qtc2_state == '-') or rcc_minus_index
+
+    if plus_index:
+        transition_prob_mat = [[1.0-n1, n1, 0.0], [y1, 1.0-y1-n1, n1], [0.0, y1, 1.0-y1]]
+    if stable_index:
+        transition_prob_mat = [[1.0-y1/2.5, y1/2.5, 0.0], [2.5*n1, 1.0-2.5*n1-2.5*n1, 2.5*n1], [0.0, y1/2.5, 1.0-y1/2.5]]
+        # transition_prob_mat = [[1.0-y1, y1, 0.0], [n1, 1.0-n1-n1, n1], [0.0, y1, 1.0-y1]]
+    if minus_index:
+        transition_prob_mat = [[1.0-y1, y1, 0.0], [n1, 1.0-y1-n1, y1], [0.0, n1, 1.0-n1]]
+    else:
+        transition_prob_mat = [[1.0-sq, sq, 0.0], [nq, 1.0-nq-nq, nq], [0.0, sq, 1.0-sq]]
 
     possible_states = ['+', '0', '-']
     return transition_prob_mat[possible_states.index(qtc3_state)]
@@ -62,56 +101,24 @@ def qdc_transition_function(state_now, state_next):
     possible_states = ['far', 'close']
     return transition_prob_mat[possible_states.index(qdc_state)]
 
-"""
-def qtc3_transition_function(state_now, state_next):
-    rcc_state_now = state_now['rcc']
-    rcc_state_next = state_next['rcc']
-    qtc1_state = state_now['qtc1']
-    qtc2_state = state_now['qtc2']
-    qtc3_state = state_now['qtc3']
-
-    y1 = 0.2   # intuitive case
-    s1 = 0.05
-    n1 = 0.005  # non-intuitive case
-
-    rcc_plus_index = (rcc_state_now == 'po' and rcc_state_next == 'dc') or (rcc_state_now == 'pp' and rcc_state_next == 'po')
-    rcc_0_index = (rcc_state_now == 'dc' and rcc_state_next == 'dc') or (rcc_state_now == 'po' and rcc_state_next == 'po') or (rcc_state_now == 'pp' and rcc_state_next == 'pp')
-    rcc_minus_index = (rcc_state_now == 'dc' and rcc_state_next == 'po') or (rcc_state_now == 'po' and rcc_state_next == 'pp')
-
-    plus_index = (qtc1_state == '+' or qtc2_state == '+') or rcc_plus_index
-    stable_index = (qtc1_state == '0' and qtc2_state == '0') and rcc_0_index
-    minus_index = (qtc1_state == '-' or qtc2_state == '-') or rcc_minus_index
-
-    if plus_index:
-        transition_prob_mat = [[1.0-n1, n1, 0.0], [y1, 1.0-y1-n1, n1], [0.0, y1, 1.0-y1]]
-    if stable_index:
-        transition_prob_mat = [[1.0-y1, y1, 0.0], [n1, 1.0-n1-n1, n1], [0.0, y1, 1.0-y1]]
-    if minus_index:
-        transition_prob_mat = [[1.0-y1, y1, 0.0], [n1, 1.0-y1-n1, y1], [0.0, n1, 1.0-n1]]
-    else:
-        transition_prob_mat = [[1.0-s1, s1, 0.0], [s1, 1.0-s1-s1, s1], [0.0, s1, 1.0-s1]]
-
-    possible_states = ['+', '0', '-']
-    return transition_prob_mat[possible_states.index(qtc3_state)]
-"""
-
 def d1_observation_function(state_next, observation):
     rcc_state = state_next['rcc']
 
     y1 = 0.02
     y2 = 0.05
-    y3 = 0.5
+    y3 = 0.4
+    y4 = 0.1
 
     if rcc_state == 'dc':
         observation_prob_mat = [1.0-y1, y1, 0.0, 0.0, 0.0]
     elif rcc_state == 'po':
         observation_prob_mat = [y2, 1.0-y2, 0.0, 0.0, 0.0]
     elif rcc_state == 'eq':
-        observation_prob_mat = [y3, 0.0, 1.0 - y3, 0.0, 0.0]
+        observation_prob_mat = [y4, y3, 1.0 - y3 - y4, 0.0, 0.0]
     elif rcc_state == 'pp':
-        observation_prob_mat = [y3, 0.0, 0.0, 1.0 - y3, 0.0]
+        observation_prob_mat = [y4, y3, 0.0, 1.0 - y3 - y4, 0.0]
     elif rcc_state == 'ppi':
-        observation_prob_mat = [y3, 0.0, 0.0, 0.0, 1.0 - y3]
+        observation_prob_mat = [y4, y3, 0.0, 0.0, 1.0 - y3 - y4]
 
     possible_states = ['dc', 'po', 'eq', 'pp', 'ppi']
 
@@ -139,6 +146,7 @@ def d2_observation_function(state_next, observation):
     return observation_prob_mat[possible_states.index(observation)]
 
 def v1_observation_function(state_next, observation):
+    # fix n in (m,n)
     qtc1_state = state_next['qtc1']
 
     y1 = 0.05
@@ -162,6 +170,7 @@ def v1_observation_function(state_next, observation):
     return observation_prob_mat[possible_states.index(observation)]
 
 def v2_observation_function(state_next, observation):
+    # fix m in (m,n)
     qtc2_state = state_next['qtc2']
 
     y1 = 0.05

@@ -60,9 +60,8 @@ def compute_metrics_main():
         while True:
             time_for_single_iteration = time.time()
             depth_image, color_image = realsense.get_realsense_images()
-
-            cv2.imwrite('/home/appuser/qsrnet/data_output/image/color/image' + str(iteration) + '.jpg', color_image)
-            cv2.imwrite('/home/appuser/qsrnet/data_output/image/depth/image' + str(iteration) + '.png', depth_image)
+            # cv2.imwrite('/home/appuser/qsrnet/data_output/image/color/image' + str(iteration) + '.jpg', color_image)
+            # cv2.imwrite('/home/appuser/qsrnet/data_output/image/depth/image' + str(iteration) + '.png', depth_image)
 
             # mask rcnn
             mask_results = maskrcnn_unit.compute_masks(color_image)
@@ -72,14 +71,15 @@ def compute_metrics_main():
             mask_results['masks'] = np.append(mask_results['masks'], body_part_masks, axis = 0)
             mask_results['rois'] = np.append(mask_results['rois'], body_part_rois, axis = 0)
             mask_results = masks_for_objects_of_interest(mask_results, object_ids)
-
+            # plot masks
             image_masks = image_with_masks(color_image, mask_results['masks'])
             cv2.imwrite('/home/appuser/qsrnet/data_output/image/mask/image' + str(iteration) + '.jpg', image_masks)
 
             # find point cloud
             pcd_dict = construct_point_cloud_dict(mask_results, color_image, depth_image, configuration)
-            point_cloud_masks = point_cloud_with_masks(pcd_dict, depth_image, configuration)
-            o3d.io.write_point_cloud('/home/appuser/qsrnet/data_output/point_cloud/mask/point_cloud' + str(iteration) + '.pcd', point_cloud_masks)
+            # save point clouds
+            # point_cloud_masks = point_cloud_with_masks(pcd_dict, depth_image, configuration)
+            # o3d.io.write_point_cloud('/home/appuser/qsrnet/data_output/point_cloud/mask/point_cloud' + str(iteration) + '.pcd', point_cloud_masks)
             # pcd = o3d.io.read_point_cloud('/home/sanguk/Desktop/qsrnet/data_output/point_cloud/mask/point_cloud0.pcd')
             # o3d.visualization.draw_geometries([pcd])
 
