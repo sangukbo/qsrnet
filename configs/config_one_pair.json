@@ -11,9 +11,9 @@
         "densepose_dir": "/home/appuser/detectron2_repo/projects/DensePose"
     },
     "NAMES": {
-        "object_names": ["lefthand", "bottle", "righthand"],
-        "pair_names": ["(bottle,lefthand)", "(righthand,bottle)", "(righthand,lefthand)"],
-        "body_part_names": ["righthand", "lefthand"],
+        "object_names": ["bottle", "righthand"],
+        "pair_names": ["(bottle,righthand)"],
+        "body_part_names": ["righthand"],
         "class_names": ["person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird",
                         "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball",
                         "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple",
@@ -38,8 +38,6 @@
         "resample_at": 5
     },
     "QSR INITIAL STATES": {
-        "(bottle,lefthand)": {"rcc": "dc", "qtc1": "0", "qtc2": "0", "qtc3": "0", "qdc": "close"},
-        "(righthand,bottle)": {"rcc": "dc", "qtc1": "0", "qtc2": "0", "qtc3": "0", "qdc": "close"},
-        "(righthand,lefthand)": {"rcc": "dc", "qtc1": "0", "qtc2": "0", "qtc3": "0", "qdc": "close"}
+        "(bottle,righthand)": {"rcc": "dc", "qtc1": "0", "qtc2": "0", "qtc3": "0", "qdc": "close"}
     }
 }
