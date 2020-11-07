@@ -1,6 +1,8 @@
 # Qualitative Spatial Representation Network (QSRNet) Repository
 
-This repository contains the implementation of qualitative spatial representation network (QSRNet).
+This repository contains the implementation of qualitative spatial representation network (QSRNet). You can find more about QSRNet on the following paper.
+
+Lee et al., "QSRNet: Estimating Qualitative Spatial Representations from RGB-D Images," International Conference on Intelligent Robots and Systems (IROS), 2020.
 
 ---------------
 
