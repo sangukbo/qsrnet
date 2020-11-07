@@ -6,9 +6,14 @@ def rcc_transition_function(state_now, state_next):
     rcc_state = state_now['rcc']
     qtc3_state = state_now['qtc3']
 
+    y1 = 0.2   # intuitive case
+    s1 = 0.05
+    n1 = 0.005  # non-intuitive case
+    """
     y1 = 0.05   # intuitive case
     s1 = 0.01
     n1 = 0.002  # non-intuitive case
+    """
 
     if qtc3_state == '+':
         transition_prob_mat = [[1.0-n1, n1, 0.0, 0.0, 0.0], [y1, 1.0-y1-n1, 0.0, n1, 0.0], [0.0, y1, 1.0-y1, 0.0, 0.0], [0.0, y1, 0.0, 1.0-y1, 0.0], [0.0, y1, 0.0, 0.0, 1.0-y1]]
@@ -24,8 +29,8 @@ def qtc1_transition_function(state_now, state_next):
     # fix n in (m,n)
     qtc1_state = state_now['qtc1']
 
-    sq = 0.05
-    nq = 0.025
+    sq = 0.1
+    nq = 0.05
 
     transition_prob_mat = [[1.0-sq, sq, 0.0], [nq, 1.0-nq-nq, nq], [0.0, sq, 1.0-sq]]
 
@@ -36,8 +41,8 @@ def qtc2_transition_function(state_now, state_next):
     # fix m in (m,n)
     qtc2_state = state_now['qtc2']
 
-    sq = 0.05
-    nq = 0.025
+    sq = 0.1
+    nq = 0.05
 
     transition_prob_mat = [[1.0-sq, sq, 0.0], [nq, 1.0-nq-nq, nq], [0.0, sq, 1.0-sq]]
 
@@ -64,10 +69,10 @@ def qtc3_transition_function(state_now, state_next):
     qtc2_state = state_now['qtc2']
     qtc3_state = state_now['qtc3']
 
-    y1 = 0.2   # intuitive case
+    y1 = 0.5   # intuitive case
     n1 = 0.005  # non-intuitive case
-    sq = 0.05
-    nq = 0.025
+    sq = 0.08
+    nq = 0.04
 
     rcc_plus_index = (rcc_state_now == 'po' and rcc_state_next == 'dc') or (rcc_state_now == 'pp' and rcc_state_next == 'po')
     rcc_0_index = (rcc_state_now == 'dc' and rcc_state_next == 'dc') or (rcc_state_now == 'po' and rcc_state_next == 'po') or (rcc_state_now == 'pp' and rcc_state_next == 'pp')
@@ -80,8 +85,9 @@ def qtc3_transition_function(state_now, state_next):
     if plus_index:
         transition_prob_mat = [[1.0-n1, n1, 0.0], [y1, 1.0-y1-n1, n1], [0.0, y1, 1.0-y1]]
     if stable_index:
-        transition_prob_mat = [[1.0-y1/2.5, y1/2.5, 0.0], [2.5*n1, 1.0-2.5*n1-2.5*n1, 2.5*n1], [0.0, y1/2.5, 1.0-y1/2.5]]
-        # transition_prob_mat = [[1.0-y1, y1, 0.0], [n1, 1.0-n1-n1, n1], [0.0, y1, 1.0-y1]]
+        # transition_prob_mat = [[1.0-sq, sq, 0.0], [nq, 1.0-nq-nq, nq], [0.0, sq, 1.0-sq]]
+        # transition_prob_mat = [[1.0-y1/2.5, y1/2.5, 0.0], [2.5*n1, 1.0-2.5*n1-2.5*n1, 2.5*n1], [0.0, y1/2.5, 1.0-y1/2.5]]
+        transition_prob_mat = [[1.0-y1, y1, 0.0], [n1, 1.0-n1-n1, n1], [0.0, y1, 1.0-y1]]
     if minus_index:
         transition_prob_mat = [[1.0-y1, y1, 0.0], [n1, 1.0-y1-n1, y1], [0.0, n1, 1.0-n1]]
     else:
@@ -122,8 +128,9 @@ def d1_observation_function(state_next, observation):
 
     possible_states = ['dc', 'po', 'eq', 'pp', 'ppi']
 
-    if observation>150.0: observation = 'dc'
-    elif observation<=150.0: observation = 'po'
+    d1_threshold_vel =30.0
+    if observation>d1_threshold_vel: observation = 'dc'
+    elif observation<=d1_threshold_vel: observation = 'po'
 
     return observation_prob_mat[possible_states.index(observation)]
 
@@ -140,8 +147,9 @@ def d2_observation_function(state_next, observation):
 
     possible_states = ['far', 'close']
 
-    if observation>1000.0: observation = 'far'
-    elif observation<=1000.0: observation = 'close'
+    d2_threshold_vel =1000.0
+    if observation>d2_threshold_vel: observation = 'far'
+    elif observation<=d2_threshold_vel: observation = 'close'
 
     return observation_prob_mat[possible_states.index(observation)]
 
@@ -152,6 +160,11 @@ def v1_observation_function(state_next, observation):
     y1 = 0.05
     y2 = 0.01
     y3 = 0.025
+    """
+    y1 = 0.05
+    y2 = 0.01
+    y3 = 0.025
+    """
 
     if qtc1_state == '+':
         observation_prob_mat = [1.0-y1 - y2, y1, y2]
@@ -162,7 +175,7 @@ def v1_observation_function(state_next, observation):
 
     possible_states = ['+', '0', '-']
 
-    v1_threshold_vel = 150.0
+    v1_threshold_vel = 50.0
     if observation>v1_threshold_vel: observation = '+'
     elif -v1_threshold_vel<=observation<=v1_threshold_vel: observation = '0'
     elif observation<-v1_threshold_vel: observation = '-'
@@ -186,7 +199,7 @@ def v2_observation_function(state_next, observation):
 
     possible_states = ['+', '0', '-']
 
-    v2_threshold_vel = 150.0
+    v2_threshold_vel = 50.0
     if observation>v2_threshold_vel: observation = '+'
     elif -v2_threshold_vel<=observation<=v2_threshold_vel: observation = '0'
     elif observation<-v2_threshold_vel: observation = '-'
@@ -209,7 +222,7 @@ def v3_observation_function(state_next, observation):
 
     possible_states = ['+', '0', '-']
 
-    v3_threshold_vel = 150.0
+    v3_threshold_vel = 50.0
     if observation>v3_threshold_vel: observation = '+'
     elif -v3_threshold_vel<=observation<=v3_threshold_vel: observation = '0'
     elif observation<-v3_threshold_vel: observation = '-'

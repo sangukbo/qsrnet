@@ -35,7 +35,7 @@
         "max_pcd_distance": 30.0,
         "object_width": 300,
         "qsr_n_particles": 200,
-        "resample_at": 5
+        "resample_at": 1
     },
     "QSR INITIAL STATES": {
         "(bottle,lefthand)": {"rcc": "dc", "qtc1": "0", "qtc2": "0", "qtc3": "0", "qdc": "close"},

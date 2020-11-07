@@ -47,6 +47,23 @@ def point_cloud_with_masks(pcd_dict, depth_image, configuration):
         pcd_with_mask = pcd_with_mask + pcd
     return pcd_with_mask
 
+def save_point_clouds(pcd_dict, depth_image, configuration):
+    args = configuration['ARGUMENTS']; depth_camera_info = configuration['CAMERA INTRINSIC']['DEPTH CAMERA']
+    width = depth_camera_info['width']; height = depth_camera_info['height']
+    fx = depth_camera_info['K'][0]; cx = depth_camera_info['K'][2]; fy = depth_camera_info['K'][4]; cy = depth_camera_info['K'][5]
+    camera_intrinsic = o3d.camera.PinholeCameraIntrinsic()
+    camera_intrinsic.set_intrinsics(width, height, fx, fy, cx, cy)
+    depth_image_point_cloud = o3d.geometry.Image(copy.copy(depth_image))
+    pcd_with_mask = o3d.geometry.PointCloud.create_from_depth_image(depth_image_point_cloud, camera_intrinsic, \
+                                                                    depth_scale = 1, depth_trunc = 10000, stride = args['point_cloud_stride']*2)
+    r = random.randint(0, 255)/255; g = random.randint(0, 255)/255; b = random.randint(0, 255)/255
+    pcd_with_mask.paint_uniform_color([r, g, b])
+    o3d.io.write_point_cloud('/home/appuser/qsrnet/data_output/icp/map/map.pcd', pcd_with_mask)
+    for pcd_id in pcd_dict:
+        if pcd_id == 39:
+            pcd = copy.copy(pcd_dict[pcd_id])
+            o3d.io.write_point_cloud('/home/appuser/qsrnet/data_output/icp/object/bottle.pcd', pcd)
+
 def masks_for_objects_of_interest(mask_results, object_ids):
     # compute new mask_results for objects in object_ids
     final_size = 0
