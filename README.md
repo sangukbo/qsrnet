@@ -69,4 +69,4 @@ This repository contains implementation of qualitative spatial representation ne
 
 1. The ``dockerfile`` for the QSRNet is based on that for the [detectron2](https://github.com/facebookresearch/detectron2).
 
-2. The python project ``setup.py`` file for the QSRNet is based on these pages ([simple python project](http://www.kennethreitz.org/essays/repository-structure-and-python), [setup.py file](http://www.kennethreitz.org/essays/repository-structure-and-python)).
+2. The python project ``setup.py`` file for the QSRNet is based on these pages ([simple python project](http://www.kennethreitz.org/essays/repository-structure-and-python), [setup.py file](hhttps://github.com/kennethreitz/setup.py)).
