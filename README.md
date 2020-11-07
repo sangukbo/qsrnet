@@ -27,7 +27,7 @@ This repository contains implementation of qualitative spatial representation ne
     docker run --gpus all -it --privileged --shm-size=8gb --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/dev:/dev" --name=qsrnet qsrnet:v0
     ```
 
-    To start the existing docker container, ``docker start`` insread.
+    To start an existing docker container, ``docker start`` insread.
 
     ```
     docker start -i qsrnet
