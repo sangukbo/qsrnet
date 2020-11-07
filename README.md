@@ -21,29 +21,23 @@ This repository contains implementation of qualitative spatial representation ne
     docker build --build-arg USER_ID=$UID -t qsrnet:v0 .
     ```
 
-3. Run the docker image.
+3. Run the docker container.
 
     ```
     docker run --gpus all -it --privileged --shm-size=8gb --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" --volume="/dev:/dev" --name=qsrnet qsrnet:v0
     ```
 
-4. Start the docker image and run ``setup.py``
+    To start the existing docker container, ``docker start`` insread.
 
     ```
     docker start -i qsrnet
     ```
 
-    Then, in the docker bash shell, run ``setup.py``.
-
-    ```
-    python setup.py install --user
-    ```
-
-5. Execute another shell with the QSRNet docker image
+4. Execute another shell with the QSRNet docker container
 
     You will need to run two docker bash shells for QSRNet. One is for the neural network part which computes the metrics and the other is for the dynamic Bayesian network (DBN) part which computes the qualitative spatial representations. The two parts communicate with each other using python socket.
 
-    For this, open a new terminal and execute another docker bash shell with QSRNet image.
+    For this, open a new terminal and execute another docker bash shell with the QSRNet docker container.
 
     ```
     docker exec -it qsrnet bash

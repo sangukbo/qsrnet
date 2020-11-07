@@ -74,12 +74,12 @@ def dbn_qsr_main():
                     writer.writerow(metric_qsr_dict)
         # save metric
         print(metrics)
-        with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + str(pf_iteration) + '.pickle', 'wb') as f:
-            pickle.dump(metrics, f, protocol=2)
+        # with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/metric/' + 'metric_' + str(pf_iteration) + '.pickle', 'wb') as f:
+        #     pickle.dump(metrics, f, protocol=2)
         # save qsr
         print(qsr_joint_max_state_dict)
-        with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/qsr/' + 'qsr_' + str(pf_iteration) + '.pickle', 'wb') as f:
-            pickle.dump(qsr_joint_max_state_dict, f, protocol=2)
+        # with open(configuration['DIRECTORIES']['qsrnet_dir'] + '/data_output/qsr/' + 'qsr_' + str(pf_iteration) + '.pickle', 'wb') as f:
+        #     pickle.dump(qsr_joint_max_state_dict, f, protocol=2)
 
         pf_iteration += 1
         print(time.time() - timestamp)
